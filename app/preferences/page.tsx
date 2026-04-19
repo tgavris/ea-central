@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import {
   Mail,
   Calendar,
@@ -170,6 +170,15 @@ const STATUS_CONFIG: Record<RuleStatus, { label: string; className: string; dotC
   },
 }
 
+type PrefSection = 'profile' | 'rules' | 'notifications' | 'integrations'
+
+const SECTIONS: { id: PrefSection; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+  { id: 'profile', label: 'EA Profile', icon: User },
+  { id: 'rules', label: 'Automation Rules', icon: Zap },
+  { id: 'notifications', label: 'Notifications', icon: Bell },
+  { id: 'integrations', label: 'Integrations', icon: Globe },
+]
+
 const CATEGORY_CONFIG = {
   email: { label: 'Email rules', icon: Mail, color: 'text-blue-500' },
   calendar: { label: 'Calendar rules', icon: Calendar, color: 'text-violet-500' },
@@ -194,6 +203,25 @@ export default function PreferencesPage() {
     google: false,
   })
 
+  const [activeSection, setActiveSection] = useState<PrefSection>('profile')
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
+
+  const scrollToSection = (id: PrefSection) => {
+    setActiveSection(id)
+    const el = sectionRefs.current[id]
+    const container = scrollContainerRef.current
+    const header = headerRef.current
+    if (el && container) {
+      const headerHeight = header?.offsetHeight ?? 0
+      const containerTop = container.getBoundingClientRect().top
+      const elTop = el.getBoundingClientRect().top
+      const offset = elTop - containerTop - headerHeight - 24
+      container.scrollBy({ top: offset, behavior: 'smooth' })
+    }
+  }
+
   const toggleRule = (id: string) => {
     setRuleStatuses((prev) => ({
       ...prev,
@@ -204,8 +232,50 @@ export default function PreferencesPage() {
   const categories = ['email', 'calendar', 'travel', 'document'] as const
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto">
-      <header className="sticky top-0 z-10 bg-background border-b shrink-0">
+    <div className="flex h-full overflow-hidden">
+      {/* Left nav */}
+      <aside className="w-48 shrink-0 border-r bg-background py-6 overflow-y-auto">
+        <p className="px-4 mb-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Sections</p>
+        <nav className="space-y-0.5 px-2">
+          {SECTIONS.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => scrollToSection(id)}
+              className={cn(
+                'w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors text-left',
+                activeSection === id
+                  ? 'bg-primary/10 text-primary font-medium'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              )}
+            >
+              <Icon className="h-3.5 w-3.5 shrink-0" />
+              {label}
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Scrollable right pane */}
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto"
+        onScroll={() => {
+          const headerHeight = headerRef.current?.offsetHeight ?? 0
+          const threshold = headerHeight + 32
+          const ids = SECTIONS.map((s) => s.id)
+          for (let i = ids.length - 1; i >= 0; i--) {
+            const el = sectionRefs.current[ids[i]]
+            if (el) {
+              const rect = el.getBoundingClientRect()
+              if (rect.top <= threshold) {
+                setActiveSection(ids[i])
+                break
+              }
+            }
+          }
+        }}
+      >
+      <header ref={headerRef} className="sticky top-0 z-10 bg-background border-b shrink-0">
         <div className="px-8 py-4">
           <h1 className="text-lg font-semibold text-foreground">Preferences</h1>
           <p className="text-sm text-muted-foreground">Configure your EA Central settings and automation rules</p>
@@ -215,7 +285,7 @@ export default function PreferencesPage() {
       <main className="flex-1 max-w-3xl mx-auto w-full px-8 py-6 space-y-8">
 
         {/* A. EA Profile */}
-        <section>
+        <section ref={(el) => { sectionRefs.current['profile'] = el }}>
           <SectionHeader letter="A" title="EA Profile" />
           <div className="border rounded-xl overflow-hidden">
             <div className="flex items-start gap-4 p-5 border-b">
@@ -264,7 +334,7 @@ export default function PreferencesPage() {
         </section>
 
         {/* B. Automation Rules */}
-        <section>
+        <section ref={(el) => { sectionRefs.current['rules'] = el }}>
           <SectionHeader letter="B" title="Automation Rules" />
           <div className="space-y-5">
             {categories.map((cat) => {
@@ -332,7 +402,7 @@ export default function PreferencesPage() {
         </section>
 
         {/* C. Notifications */}
-        <section>
+        <section ref={(el) => { sectionRefs.current['notifications'] = el }}>
           <SectionHeader letter="C" title="Notifications" />
           <div className="border rounded-xl divide-y overflow-hidden">
             <NotifRow
@@ -367,7 +437,7 @@ export default function PreferencesPage() {
         </section>
 
         {/* D. Integrations */}
-        <section>
+        <section ref={(el) => { sectionRefs.current['integrations'] = el }}>
           <SectionHeader letter="D" title="Integrations" />
           <div className="border rounded-xl divide-y overflow-hidden">
             <IntegrationRow
@@ -405,6 +475,7 @@ export default function PreferencesPage() {
 
         <div className="pb-8" />
       </main>
+      </div>
     </div>
   )
 }
@@ -507,7 +578,7 @@ function IntegrationRow({
         <div className="flex items-center gap-2 mb-0.5">
           <p className="text-sm font-medium text-foreground">{name}</p>
           {connected && (
-            <span className="flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-full">
+            <span className="flex items-center gap-1 text-[10px] font-medium text-muted-foreground bg-muted border border-border px-1.5 py-0.5 rounded-full">
               <Check className="h-2.5 w-2.5" />
               Connected
             </span>
