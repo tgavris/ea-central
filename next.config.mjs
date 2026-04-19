@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
+const isGithubActions = process.env.GITHUB_ACTIONS === 'true'
+
 const nextConfig = {
-  output: 'export',
-  basePath: '/ea-central',
+  ...(isGithubActions && {
+    output: 'export',
+    basePath: '/ea-central',
+  }),
   typescript: {
     ignoreBuildErrors: true,
   },
