@@ -99,7 +99,7 @@ export function InsightRow({ insight, showColleague = false }: InsightRowProps) 
   }
 
   return (
-    <div className="group flex items-start gap-3 py-2.5 -mx-5 px-5 rounded-lg hover:bg-blue-100/60 transition-colors duration-100">
+    <div className="group flex items-start gap-3 py-2.5 -mx-5 px-5 rounded-lg hover:bg-muted/60 transition-colors duration-100">
       {/* Urgency dot */}
       <span className={cn(
         'mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full',
@@ -123,11 +123,7 @@ export function InsightRow({ insight, showColleague = false }: InsightRowProps) 
         {(insight.sources || insight.badge || showColleague) && (
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
             {insight.badge && (
-              <span className={cn(
-                'text-xs font-medium',
-                insight.badge === 'Decision needed' && 'text-amber-600',
-                insight.badge === 'Predicted risk' && 'text-blue-600',
-              )}>
+              <span className="text-xs font-medium text-muted-foreground">
                 {insight.badge}
               </span>
             )}

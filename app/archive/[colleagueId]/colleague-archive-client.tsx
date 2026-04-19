@@ -28,7 +28,6 @@ export function ColleagueArchiveClient({ colleagueId }: ColleagueArchiveClientPr
   const tabs = [
     { label: 'Insights', href: `/insights/${colleagueId}`, count: insightCount },
     { label: 'To do', href: `/todo/${colleagueId}`, count: todoCount },
-    { label: 'Archive', href: `/archive/${colleagueId}` },
   ]
 
   const isActive = (href: string) => pathname === href

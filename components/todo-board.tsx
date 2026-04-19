@@ -74,20 +74,8 @@ function InsightBoardCard({
       )}
     >
       <div className="flex items-start gap-2 mb-2">
-        <div className={cn(
-          'h-6 w-6 rounded flex items-center justify-center shrink-0',
-          insight.type === 'email' && 'bg-blue-100',
-          insight.type === 'calendar' && 'bg-violet-100',
-          insight.type === 'travel' && 'bg-emerald-100',
-          insight.type === 'document' && 'bg-orange-100',
-        )}>
-          <Icon className={cn(
-            'h-3.5 w-3.5',
-            insight.type === 'email' && 'text-blue-600',
-            insight.type === 'calendar' && 'text-violet-600',
-            insight.type === 'travel' && 'text-emerald-600',
-            insight.type === 'document' && 'text-orange-600',
-          )} />
+        <div className="h-6 w-6 rounded flex items-center justify-center shrink-0 bg-muted">
+          <Icon className="h-3.5 w-3.5 text-muted-foreground" />
         </div>
         <p className="text-xs font-semibold text-foreground leading-snug flex-1">{insight.title}</p>
       </div>
@@ -101,11 +89,7 @@ function InsightBoardCard({
           {colleagueName}
         </span>
         {insight.badge && (
-          <span className={cn(
-            'text-[10px] font-medium px-1.5 py-0.5 rounded',
-            insight.badge === 'Decision needed' && 'bg-amber-100 text-amber-700',
-            insight.badge === 'Predicted risk' && 'bg-blue-100 text-blue-700',
-          )}>
+          <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
             {insight.badge}
           </span>
         )}
@@ -171,12 +155,12 @@ function InsightModal({
               {insight.badge && (
                 <div className="mb-2">
                   {insight.badge === 'Decision needed' && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-xs font-medium bg-muted text-muted-foreground border border-border px-2 py-0.5 rounded-full">
                       <Zap className="h-3 w-3" /> Decision needed
                     </span>
                   )}
                   {insight.badge === 'Predicted risk' && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-xs font-medium bg-muted text-muted-foreground border border-border px-2 py-0.5 rounded-full">
                       <Sparkles className="h-3 w-3" /> Predicted risk
                     </span>
                   )}
@@ -261,8 +245,8 @@ function InsightModal({
               <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">Urgency</p>
               <div className="flex items-center gap-1">
                 {([
-                  { id: 'high', label: 'High', active: 'bg-red-100 text-red-700 border-red-300', dot: 'bg-red-500' },
-                  { id: 'medium', label: 'Medium', active: 'bg-amber-100 text-amber-700 border-amber-300', dot: 'bg-amber-400' },
+                  { id: 'high', label: 'High', active: 'bg-muted text-foreground border-border', dot: 'bg-red-500' },
+                  { id: 'medium', label: 'Medium', active: 'bg-muted text-foreground border-border', dot: 'bg-amber-400' },
                   { id: 'low', label: 'Low', active: 'bg-muted text-muted-foreground border-border', dot: 'bg-muted-foreground/40' },
                 ] as { id: TodoUrgency; label: string; active: string; dot: string }[]).map((opt) => (
                   <button
@@ -287,9 +271,9 @@ function InsightModal({
               <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">Speed</p>
               <div className="flex items-center gap-1">
                 {([
-                  { id: 'quick', label: 'Quick', active: 'bg-green-100 text-green-700 border-green-300' },
-                  { id: 'medium', label: 'Medium', active: 'bg-blue-100 text-blue-700 border-blue-300' },
-                  { id: 'long', label: 'Long', active: 'bg-purple-100 text-purple-700 border-purple-300' },
+                  { id: 'quick', label: 'Quick', active: 'bg-muted text-foreground border-border' },
+                  { id: 'medium', label: 'Medium', active: 'bg-muted text-foreground border-border' },
+                  { id: 'long', label: 'Long', active: 'bg-muted text-foreground border-border' },
                 ] as { id: TodoSpeed; label: string; active: string }[]).map((opt) => (
                   <button
                     key={opt.id}
@@ -313,9 +297,9 @@ function InsightModal({
             <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">Move to</p>
             <div className="flex items-center gap-2">
               {([
-                { id: 'in-progress', label: 'In progress', className: 'border-violet-200 text-violet-700 hover:bg-violet-50' },
-                { id: 'done', label: 'Done', className: 'border-green-200 text-green-700 hover:bg-green-50' },
-                { id: 'snoozed', label: 'Snoozed', className: 'border-amber-200 text-amber-700 hover:bg-amber-50' },
+                { id: 'in-progress', label: 'In progress', className: 'border-border text-foreground hover:bg-muted' },
+                { id: 'done', label: 'Done', className: 'border-border text-foreground hover:bg-muted' },
+                { id: 'snoozed', label: 'Snoozed', className: 'border-border text-foreground hover:bg-muted' },
               ] as { id: TodoStatus; label: string; className: string }[]).map((col) => (
                 <button
                   key={col.id}

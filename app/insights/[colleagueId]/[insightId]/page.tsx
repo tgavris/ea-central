@@ -63,13 +63,13 @@ export default async function InsightDetailPage({ params }: InsightDetailPagePro
             {insight.badge && (
               <div>
                 {insight.badge === 'Decision needed' && (
-                  <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs font-medium">
+                  <Badge variant="secondary" className="text-xs font-medium">
                     <Zap className="h-3 w-3 mr-1" />
                     Decision needed
                   </Badge>
                 )}
                 {insight.badge === 'Predicted risk' && (
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
+                  <Badge variant="secondary" className="text-xs font-medium">
                     <Sparkles className="h-3 w-3 mr-1" />
                     Predicted risk
                   </Badge>

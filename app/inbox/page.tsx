@@ -88,7 +88,7 @@ export default function InboxPage() {
               className={cn(
                 'w-full text-left px-4 py-3 border-b border-border/50 transition-colors',
                 selected?.id === item.id
-                  ? 'bg-blue-50'
+                  ? 'bg-muted'
                   : 'hover:bg-muted/50'
               )}
             >

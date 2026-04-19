@@ -24,7 +24,6 @@ export function ColleagueInsightsClient({ colleague, colleagueId, insights, atte
   const tabs = [
     { label: 'Insights', href: `/insights/${colleagueId}`, count: attentionCount },
     { label: 'To do', href: `/todo/${colleagueId}`, count: todoCount },
-    { label: 'Archive', href: `/archive/${colleagueId}` },
   ]
 
   const isActive = (href: string) => pathname === href

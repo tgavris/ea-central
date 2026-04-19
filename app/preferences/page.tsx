@@ -155,18 +155,18 @@ type Integration = {
 const STATUS_CONFIG: Record<RuleStatus, { label: string; className: string; dotClass: string }> = {
   active: {
     label: 'Active',
-    className: 'bg-green-50 text-green-700 border-green-200',
+    className: 'bg-muted text-foreground border-border',
     dotClass: 'bg-green-500',
   },
   paused: {
     label: 'Paused',
-    className: 'bg-amber-50 text-amber-700 border-amber-200',
+    className: 'bg-muted text-muted-foreground border-border',
     dotClass: 'bg-amber-400',
   },
   pending: {
     label: 'Pending',
-    className: 'bg-blue-50 text-blue-700 border-blue-200',
-    dotClass: 'bg-blue-400',
+    className: 'bg-muted text-muted-foreground border-border',
+    dotClass: 'bg-muted-foreground/40',
   },
 }
 
@@ -225,7 +225,7 @@ export default function PreferencesPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <h3 className="text-sm font-semibold text-foreground">Alex Morgan</h3>
-                  <span className="text-[10px] font-medium bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full">EA</span>
+                  <span className="text-[10px] font-medium bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">EA</span>
                 </div>
                 <p className="text-xs text-muted-foreground">alex.morgan@mckinsey.com</p>
                 <p className="text-xs text-muted-foreground mt-0.5">McKinsey &amp; Company · London, GMT+1</p>
@@ -242,21 +242,21 @@ export default function PreferencesPage() {
               <ProfileRow label="Working hours" value="Mon–Fri, 8:00 AM – 6:30 PM" />
               <ProfileRow label="Partners managed">
                 <div className="flex items-center gap-2">
-                  <span className="flex items-center gap-1 text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 rounded-full">
-                    <span className="h-3.5 w-3.5 rounded-full bg-blue-500 text-[8px] text-white flex items-center justify-center font-bold">S</span>
+                  <span className="flex items-center gap-1 text-xs font-medium bg-muted text-foreground border border-border px-2 py-0.5 rounded-full">
+                    <span className="h-3.5 w-3.5 rounded-full bg-primary text-[8px] text-primary-foreground flex items-center justify-center font-bold">S</span>
                     Sarah Chen
                   </span>
-                  <span className="flex items-center gap-1 text-xs font-medium bg-orange-50 text-orange-700 border border-orange-100 px-2 py-0.5 rounded-full">
-                    <span className="h-3.5 w-3.5 rounded-full bg-orange-500 text-[8px] text-white flex items-center justify-center font-bold">J</span>
+                  <span className="flex items-center gap-1 text-xs font-medium bg-muted text-foreground border border-border px-2 py-0.5 rounded-full">
+                    <span className="h-3.5 w-3.5 rounded-full bg-primary text-[8px] text-primary-foreground flex items-center justify-center font-bold">J</span>
                     James Whitfield
                   </span>
                 </div>
               </ProfileRow>
             </div>
 
-            <div className="px-5 py-3 bg-blue-50 border-t border-blue-100 flex items-start gap-2">
-              <Info className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
-              <p className="text-xs text-blue-700">
+            <div className="px-5 py-3 bg-muted border-t border-border flex items-start gap-2">
+              <Info className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
+              <p className="text-xs text-muted-foreground">
                 Partner-specific experience is enabled. Rules and insights are personalised for each partner you manage.
               </p>
             </div>
@@ -296,7 +296,7 @@ export default function PreferencesPage() {
                                     {sc.label}
                                   </span>
                                   {rule.partnerId && (
-                                    <span className="text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-100 px-1.5 py-0.5 rounded-full">
+                                    <span className="text-[10px] font-medium bg-muted text-muted-foreground border border-border px-1.5 py-0.5 rounded-full">
                                       Sarah Chen
                                     </span>
                                   )}

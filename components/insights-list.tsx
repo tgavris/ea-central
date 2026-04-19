@@ -60,12 +60,12 @@ export function InsightsList({ insights, colleagueName }: InsightsListProps) {
                       {name}
                     </span>
                   </div>
-                  <div className="bg-blue-50 rounded-xl px-5 py-1">
+                  <div className="bg-card border border-border rounded-xl px-5 py-1">
                     {groupItems.map((insight, index) => (
                       <div key={insight.id}>
                         <InsightRow insight={insight} />
                         {index < groupItems.length - 1 && (
-                          <hr className="border-blue-100" />
+                          <hr className="border-border" />
                         )}
                       </div>
                     ))}
@@ -84,12 +84,12 @@ export function InsightsList({ insights, colleagueName }: InsightsListProps) {
         <h2 className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3">
           {title}
         </h2>
-        <div className="bg-blue-50 rounded-xl px-5 py-1">
+        <div className="bg-card border border-border rounded-xl px-5 py-1">
           {items.map((insight, index) => (
             <div key={insight.id}>
               <InsightRow insight={insight} />
               {index < items.length - 1 && (
-                <hr className="border-blue-100" />
+                <hr className="border-border" />
               )}
             </div>
           ))}

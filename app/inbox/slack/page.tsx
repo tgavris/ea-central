@@ -452,7 +452,7 @@ export default function SlackPage() {
               {thread.channel.replace('#', '')}
             </h1>
             {thread.badge && (
-              <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded">
+              <span className="bg-muted text-muted-foreground text-xs font-medium px-2 py-0.5 rounded">
                 {thread.badge}
               </span>
             )}

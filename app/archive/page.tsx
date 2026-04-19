@@ -17,7 +17,6 @@ export default function ArchivePage() {
   const tabs = [
     { label: 'Insights', href: '/insights', count: insightCount },
     { label: 'To do', href: '/todo', count: todoCount },
-    { label: 'Archive', href: '/archive' },
   ]
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/')
