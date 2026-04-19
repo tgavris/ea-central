@@ -28,8 +28,8 @@ import { cn } from '@/lib/utils'
 import { contacts, getContactsByPartner, type Contact } from '@/lib/data/contacts'
 
 const partners = [
-  { id: 'sarah-chen', name: 'Sarah Chen', initials: 'SC', color: 'bg-blue-500' },
-  { id: 'james-whitfield', name: 'James Whitfield', initials: 'JW', color: 'bg-orange-500' },
+  { id: 'sarah-chen', name: 'Sarah Chen', initials: 'SC' },
+  { id: 'james-whitfield', name: 'James Whitfield', initials: 'JW' },
 ]
 
 function groupByLastName(list: Contact[]): Record<string, Contact[]> {
@@ -73,40 +73,38 @@ export default function ContactsPage() {
       {/* Left panel */}
       <div className="w-72 shrink-0 flex flex-col border-r bg-background overflow-hidden">
         {/* Header */}
-        <div className="px-4 py-4 border-b shrink-0">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h1 className="text-base font-semibold text-foreground">Contacts</h1>
-              <p className="text-xs text-muted-foreground mt-0.5">Key contacts and relationships for each partner</p>
-            </div>
-            <button className="flex items-center gap-1 text-xs font-medium text-primary border border-primary/30 rounded-md px-2 py-1 hover:bg-primary/5 transition-colors">
+        <div className="px-4 py-3 border-b shrink-0">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <h1 className="text-base font-semibold text-foreground shrink-0">Contacts</h1>
+            <button className="flex items-center gap-1 text-xs font-medium text-primary border border-primary/30 rounded-md px-2 py-1 hover:bg-primary/5 transition-colors whitespace-nowrap shrink-0">
               <Plus className="h-3 w-3" />
               New contact
             </button>
           </div>
 
           {/* View by partner */}
-          <div className="flex items-center gap-1 mb-3">
-            <span className="text-[11px] text-muted-foreground mr-1 shrink-0">View by partner:</span>
-            <div className="flex gap-1">
+          <div className="flex items-center gap-1.5 mb-3">
+            <span className="text-[11px] text-muted-foreground shrink-0">Partner:</span>
+            <div className="flex gap-1 min-w-0">
               {partners.map((p) => {
                 const count = getContactsByPartner(p.id).length
+                const isActive = activePartnerId === p.id
                 return (
                   <button
                     key={p.id}
                     onClick={() => setActivePartnerId(p.id)}
                     className={cn(
-                      'flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-colors',
-                      activePartnerId === p.id
-                        ? 'bg-blue-100 text-blue-700 border border-blue-200'
-                        : 'text-muted-foreground hover:bg-muted border border-transparent'
+                      'flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-colors whitespace-nowrap',
+                      isActive
+                        ? 'bg-muted text-foreground border border-border'
+                        : 'text-muted-foreground hover:bg-muted/60 border border-transparent'
                     )}
                   >
-                    <span className={cn('h-4 w-4 rounded-full text-[9px] font-bold text-white flex items-center justify-center', p.color)}>
-                      {p.initials.charAt(0)}
+                    <span className="h-4 w-4 rounded-full bg-muted-foreground/20 text-[9px] font-bold text-foreground/70 flex items-center justify-center shrink-0">
+                      {p.initials}
                     </span>
-                    {p.name.split(' ')[0]} {p.name.split(' ')[1].charAt(0)}.
-                    <span className="text-[10px] opacity-70">{count}</span>
+                    <span>{p.name.split(' ')[0]} {p.name.split(' ')[1].charAt(0)}.</span>
+                    <span className="text-[10px] text-muted-foreground">{count}</span>
                   </button>
                 )
               })}
@@ -129,20 +127,17 @@ export default function ContactsPage() {
           <button
             onClick={() => setNeedsAttentionOnly((v) => !v)}
             className={cn(
-              'flex items-center justify-between w-full px-2.5 py-1.5 rounded-md text-xs transition-colors',
+              'flex items-center justify-between w-full px-2.5 py-1.5 rounded-md text-xs transition-colors border',
               needsAttentionOnly
-                ? 'bg-amber-50 border border-amber-200 text-amber-700'
-                : 'bg-muted text-muted-foreground hover:text-foreground'
+                ? 'bg-muted border-border text-foreground'
+                : 'bg-transparent border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/60'
             )}
           >
             <span className="flex items-center gap-1.5">
               <AlertCircle className="h-3.5 w-3.5" />
               Needs attention
             </span>
-            <span className={cn(
-              'text-[11px] font-semibold px-1.5 py-0.5 rounded-full',
-              needsAttentionOnly ? 'bg-amber-200 text-amber-800' : 'bg-muted-foreground/20 text-muted-foreground'
-            )}>
+            <span className="text-[11px] font-medium bg-muted-foreground/15 text-muted-foreground px-1.5 py-0.5 rounded-full">
               {needsAttentionCount}
             </span>
           </button>
@@ -164,7 +159,7 @@ export default function ContactsPage() {
                     onClick={() => setSelectedId(c.id)}
                     className={cn(
                       'w-full text-left px-4 py-2.5 border-b border-border/50 flex items-center gap-3 transition-colors',
-                      selectedId === c.id ? 'bg-blue-50' : 'hover:bg-muted/50'
+                      selectedId === c.id ? 'bg-muted' : 'hover:bg-muted/50'
                     )}
                   >
                     <div className="h-8 w-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-[11px] font-bold text-white shrink-0">
@@ -175,12 +170,12 @@ export default function ContactsPage() {
                         <span className="text-xs font-medium text-foreground truncate">
                           {c.lastName}, {c.firstName}
                         </span>
-                        {c.starred && <Star className="h-3 w-3 text-amber-400 fill-amber-400 shrink-0" />}
+                        {c.starred && <Star className="h-3 w-3 text-muted-foreground fill-muted-foreground/40 shrink-0" />}
                       </div>
                       <span className="text-[11px] text-muted-foreground truncate block">{c.email}</span>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      {c.needsAttention && <AlertCircle className="h-3.5 w-3.5 text-amber-500" />}
+                      {c.needsAttention && <AlertCircle className="h-3.5 w-3.5 text-muted-foreground" />}
                       {selectedId === c.id && <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
                     </div>
                   </button>
@@ -238,21 +233,21 @@ function ContactDetail({ contact }: { contact: Contact }) {
       <div className="px-8 py-5 space-y-5">
         {/* Suggested from Outlook banner */}
         {contact.suggestedFromOutlook && !confirmedSuggested && !dismissedSuggested && (
-          <div className="flex items-center justify-between gap-3 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2.5">
-            <span className="flex items-center gap-2 text-xs text-blue-700 font-medium">
-              <Sparkles className="h-3.5 w-3.5" />
+          <div className="flex items-center justify-between gap-3 bg-muted border border-border rounded-lg px-4 py-2.5">
+            <span className="flex items-center gap-2 text-xs text-foreground font-medium">
+              <Sparkles className="h-3.5 w-3.5 text-muted-foreground" />
               Suggested from Outlook interaction history
             </span>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setConfirmedSuggested(true)}
-                className="flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded px-2 py-1 hover:bg-green-100 transition-colors"
+                className="flex items-center gap-1 text-xs font-medium text-foreground border border-border rounded px-2 py-1 hover:bg-background transition-colors"
               >
                 <Check className="h-3 w-3" /> Confirm
               </button>
               <button
                 onClick={() => setDismissedSuggested(true)}
-                className="flex items-center gap-1 text-xs font-medium text-muted-foreground border rounded px-2 py-1 hover:bg-muted transition-colors"
+                className="flex items-center gap-1 text-xs font-medium text-muted-foreground border rounded px-2 py-1 hover:bg-background transition-colors"
               >
                 <X className="h-3 w-3" /> Dismiss
               </button>
@@ -264,11 +259,11 @@ function ContactDetail({ contact }: { contact: Contact }) {
         {visibleAlerts.map((alert, i) => (
           <div
             key={i}
-            className="border border-amber-200 rounded-lg overflow-hidden"
+            className="border border-border rounded-lg overflow-hidden"
           >
-            <div className="flex items-center gap-2 px-4 py-2.5 bg-amber-50">
-              <RefreshCw className="h-3.5 w-3.5 text-amber-600" />
-              <span className="text-xs font-medium text-amber-800">{alert.label}</span>
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-muted/50">
+              <RefreshCw className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs font-medium text-foreground">{alert.label}</span>
             </div>
             <div className="px-4 py-3">
               <div className="flex items-center gap-2 mb-1.5">
@@ -287,7 +282,7 @@ function ContactDetail({ contact }: { contact: Contact }) {
               >
                 Dismiss
               </button>
-              <button className="flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded px-2 py-1 hover:bg-green-100 transition-colors">
+              <button className="flex items-center gap-1 text-xs font-medium text-foreground border border-border rounded px-2 py-1 hover:bg-muted transition-colors">
                 <Check className="h-3 w-3" /> Update
               </button>
             </div>
@@ -299,7 +294,7 @@ function ContactDetail({ contact }: { contact: Contact }) {
           <div className="space-y-3">
             {contact.email && (
               <DetailRow icon={<Mail className="h-3.5 w-3.5" />} label="Email">
-                <a href={`mailto:${contact.email}`} className="text-blue-600 hover:underline">{contact.email}</a>
+                <a href={`mailto:${contact.email}`} className="text-foreground hover:underline">{contact.email}</a>
               </DetailRow>
             )}
             {contact.workPhone && (
@@ -319,7 +314,7 @@ function ContactDetail({ contact }: { contact: Contact }) {
             )}
             {contact.linkedIn && (
               <DetailRow icon={<Linkedin className="h-3.5 w-3.5" />} label="LinkedIn">
-                <a href={contact.linkedIn} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                <a href={contact.linkedIn} target="_blank" rel="noopener noreferrer" className="text-foreground hover:underline">
                   View profile ↗
                 </a>
               </DetailRow>
@@ -370,7 +365,7 @@ function ContactDetail({ contact }: { contact: Contact }) {
                   <p className="text-xs text-muted-foreground mb-1.5">Key topics</p>
                   <div className="flex flex-wrap gap-1.5">
                     {contact.keyTopics.map((t) => (
-                      <span key={t} className="text-xs bg-blue-50 text-blue-700 border border-blue-100 rounded-full px-2.5 py-0.5">
+                      <span key={t} className="text-xs bg-muted text-muted-foreground border border-border rounded-full px-2.5 py-0.5">
                         {t}
                       </span>
                     ))}
@@ -408,21 +403,21 @@ function ContactDetail({ contact }: { contact: Contact }) {
             </div>
             <div className="px-4 py-3">
               <div className="flex items-center gap-3 mb-2">
-                <div className="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
-                  <Calendar className="h-4 w-4 text-blue-600" />
+                <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-foreground">{contact.nextInteraction.title}</p>
                   <p className="text-xs text-muted-foreground">
                     {contact.nextInteraction.date}{' '}
-                    <span className="text-blue-600 font-medium">· in {contact.nextInteraction.daysAway} days</span>
+                    <span className="text-foreground font-medium">· in {contact.nextInteraction.daysAway} days</span>
                   </p>
                 </div>
               </div>
               {contact.nextInteraction.warning && (
-                <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-2">
-                  <AlertCircle className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                  <p className="text-xs text-amber-700">{contact.nextInteraction.warning}</p>
+                <div className="flex items-center gap-2 bg-muted border border-border rounded-lg px-3 py-2 mt-2">
+                  <AlertCircle className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                  <p className="text-xs text-muted-foreground">{contact.nextInteraction.warning}</p>
                 </div>
               )}
             </div>
@@ -444,12 +439,7 @@ function ContactDetail({ contact }: { contact: Contact }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-sm font-medium text-foreground">{person.name}</span>
-                      <span className={cn(
-                        'text-[10px] font-medium px-1.5 py-0.5 rounded-full border',
-                        person.strength === 'strong' && 'bg-green-50 text-green-700 border-green-200',
-                        person.strength === 'moderate' && 'bg-blue-50 text-blue-700 border-blue-200',
-                        person.strength === 'weak' && 'bg-muted text-muted-foreground border-border',
-                      )}>
+                      <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full border bg-muted text-muted-foreground border-border">
                         {person.strength}
                       </span>
                     </div>
