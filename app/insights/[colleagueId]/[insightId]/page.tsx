@@ -3,10 +3,14 @@ import Link from 'next/link'
 import { ArrowLeft, Mail, Calendar, Plane, FileText, ExternalLink, Zap, Sparkles, Layers } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { getInsightById } from '@/lib/data/insights'
+import { getInsightById, insights } from '@/lib/data/insights'
 import { getColleagueById } from '@/lib/data/colleagues'
 import { formatDateTime } from '@/lib/format-date'
 import { AddToTodoButton } from '@/components/add-to-todo-button'
+
+export function generateStaticParams() {
+  return insights.map((i) => ({ colleagueId: i.colleagueId, insightId: i.id }))
+}
 
 const typeIcons = {
   email: Mail,

@@ -8,6 +8,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { TodoBoard } from '@/components/todo-board'
 import { cn } from '@/lib/utils'
+import { colleagues } from '@/lib/data/colleagues'
+
+export function generateStaticParams() {
+  return colleagues.map((c) => ({ colleagueId: c.id }))
+}
 import { useTodo } from '@/lib/todo-context'
 import { insights, getNeedsAttentionCount } from '@/lib/data/insights'
 import { getColleagueById } from '@/lib/data/colleagues'

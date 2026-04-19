@@ -3,7 +3,16 @@ import { InsightsHeader } from '@/components/insights-header'
 import { InsightsList } from '@/components/insights-list'
 import { InsightsPageClient } from '@/components/insights-page-client'
 import { getInsightsByColleagueAndTeam, getNeedsAttentionCountByColleagueAndTeam } from '@/lib/data/insights'
-import { getColleagueById } from '@/lib/data/colleagues'
+import { getColleagueById, colleagues } from '@/lib/data/colleagues'
+
+export function generateStaticParams() {
+  return colleagues.flatMap((c) =>
+    (c.teams ?? []).map((team) => ({
+      colleagueId: c.id,
+      teamName: encodeURIComponent(team),
+    }))
+  )
+}
 
 interface ColleagueTeamInsightsPageProps {
   params: Promise<{ colleagueId: string; teamName: string }>

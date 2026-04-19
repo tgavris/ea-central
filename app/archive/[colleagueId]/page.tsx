@@ -5,8 +5,12 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useTodo } from '@/lib/todo-context'
-import { getColleagueById } from '@/lib/data/colleagues'
+import { getColleagueById, colleagues } from '@/lib/data/colleagues'
 import { getInsightsByColleague, getNeedsAttentionCount } from '@/lib/data/insights'
+
+export function generateStaticParams() {
+  return colleagues.map((c) => ({ colleagueId: c.id }))
+}
 
 interface ColleagueArchivePageProps {
   params: Promise<{ colleagueId: string }>

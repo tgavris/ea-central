@@ -1,7 +1,11 @@
 import { notFound } from 'next/navigation'
 import { getInsightsByColleague, getNeedsAttentionCount } from '@/lib/data/insights'
-import { getColleagueById } from '@/lib/data/colleagues'
+import { getColleagueById, colleagues } from '@/lib/data/colleagues'
 import { ColleagueInsightsClient } from '@/components/colleague-insights-client'
+
+export function generateStaticParams() {
+  return colleagues.map((c) => ({ colleagueId: c.id }))
+}
 
 interface ColleagueInsightsPageProps {
   params: Promise<{ colleagueId: string }>
