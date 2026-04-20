@@ -9,9 +9,11 @@ import { useTodo } from '@/lib/todo-context'
 interface InsightRowProps {
   insight: Insight
   showColleague?: boolean
+  onSelect?: () => void
+  isSelected?: boolean
 }
 
-export function InsightRow({ insight, showColleague = false }: InsightRowProps) {
+export function InsightRow({ insight, showColleague = false, onSelect, isSelected }: InsightRowProps) {
   const { addTodo, removeTodo, isTodoAdded, registerUndo, dismissUndo } = useTodo()
 
   // 'idle' | 'added' | 'dismissed'
@@ -99,7 +101,15 @@ export function InsightRow({ insight, showColleague = false }: InsightRowProps) 
   }
 
   return (
-    <div className="group flex items-start gap-3 py-2.5 -mx-5 px-5 rounded-lg hover:bg-muted/60 transition-colors duration-100">
+    <div
+      role={onSelect ? 'button' : undefined}
+      onClick={onSelect}
+      className={cn(
+        'group flex items-start gap-3 py-2.5 -mx-5 px-5 rounded-lg transition-colors duration-100',
+        onSelect && 'cursor-pointer',
+        isSelected ? 'bg-muted' : 'hover:bg-muted/60',
+      )}
+    >
       {/* Urgency dot */}
       <span className={cn(
         'mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full',
@@ -111,11 +121,17 @@ export function InsightRow({ insight, showColleague = false }: InsightRowProps) 
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <Link href={`/insights/${insight.colleagueId}/${insight.id}`} className="inline">
-          <span className="text-sm font-semibold text-foreground hover:underline underline-offset-2 cursor-pointer">
+        {onSelect ? (
+          <span className="text-sm font-semibold text-foreground">
             {insight.title}
           </span>
-        </Link>
+        ) : (
+          <Link href={`/insights/${insight.colleagueId}/${insight.id}`} className="inline">
+            <span className="text-sm font-semibold text-foreground hover:underline underline-offset-2 cursor-pointer">
+              {insight.title}
+            </span>
+          </Link>
+        )}
         <span className="text-sm text-muted-foreground">
           {' '}&ndash;{' '}{insight.description}
         </span>

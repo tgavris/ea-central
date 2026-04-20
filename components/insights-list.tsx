@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { User } from 'lucide-react'
 import { InsightRow } from '@/components/insight-card'
@@ -7,9 +9,11 @@ import type { Insight } from '@/lib/types'
 interface InsightsListProps {
   insights: Insight[]
   colleagueName?: string
+  selectedId?: string
+  onSelect?: (insight: Insight) => void
 }
 
-export function InsightsList({ insights, colleagueName }: InsightsListProps) {
+export function InsightsList({ insights, colleagueName, selectedId, onSelect }: InsightsListProps) {
   const needsAttention = insights.filter(
     (i) => i.urgency === 'urgent' || i.urgency === 'predicted-risk' || i.badge
   )
@@ -63,7 +67,11 @@ export function InsightsList({ insights, colleagueName }: InsightsListProps) {
                   <div className="bg-card border border-border rounded-xl px-5 py-1">
                     {groupItems.map((insight, index) => (
                       <div key={insight.id}>
-                        <InsightRow insight={insight} />
+                        <InsightRow
+                          insight={insight}
+                          onSelect={onSelect ? () => onSelect(insight) : undefined}
+                          isSelected={selectedId === insight.id}
+                        />
                         {index < groupItems.length - 1 && (
                           <hr className="border-border" />
                         )}
@@ -87,7 +95,11 @@ export function InsightsList({ insights, colleagueName }: InsightsListProps) {
         <div className="bg-card border border-border rounded-xl px-5 py-1">
           {items.map((insight, index) => (
             <div key={insight.id}>
-              <InsightRow insight={insight} />
+              <InsightRow
+                insight={insight}
+                onSelect={onSelect ? () => onSelect(insight) : undefined}
+                isSelected={selectedId === insight.id}
+              />
               {index < items.length - 1 && (
                 <hr className="border-border" />
               )}
