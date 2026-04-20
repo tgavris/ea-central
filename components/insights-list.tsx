@@ -57,11 +57,11 @@ export function InsightsList({ insights, colleagueName, selectedId, onSelect }: 
               return (
                 <div key={name}>
                   {/* Colleague badge row */}
-                  <div className="flex items-center gap-2 px-5 py-2 border-t border-border bg-muted/30">
-                    <div className="flex h-4 w-4 items-center justify-center rounded bg-muted-foreground/20">
-                      <User className="h-2.5 w-2.5 text-foreground/60" />
+                  <div className="flex items-center gap-2 px-5 py-2 border-t border-border bg-foreground">
+                    <div className="flex h-4 w-4 items-center justify-center rounded bg-background/20">
+                      <User className="h-2.5 w-2.5 text-background/80" />
                     </div>
-                    <span className="text-xs font-semibold text-foreground">{name}</span>
+                    <span className="text-xs font-semibold text-background">{name}</span>
                   </div>
                   {/* Insight rows */}
                   {groupItems.map((insight, index) => (
