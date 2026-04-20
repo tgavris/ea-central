@@ -23,6 +23,8 @@ export type Insight = {
   whyItMatters?: string
   whatItImpacts?: string
   actionStep?: { description: string; ctaLabel: string }
+  conflictSlots?: Array<{ title: string; time: string; note: string; accent: 'blue' | 'orange' | 'red' }>
+  alternatives?: Array<{ label: string; sublabel: string; detail: string; recommended?: boolean; ctaLabel: string }>
 }
 
 export type TodoStatus = 'todo' | 'in-progress' | 'done' | 'snoozed'

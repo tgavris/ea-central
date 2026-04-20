@@ -73,6 +73,10 @@ Best regards`,
     whatItImpacts: 'Acme Corp CEO is a Tier 1 client. Moving board prep past 4 PM risks Sarah\'s evening commitments and reduces preparation quality.',
     actionStep: { description: 'Review both events and select the resolution option', ctaLabel: 'View Conflict' },
     crossChannelContext: 'The Acme Corp call was originally scheduled last week but was postponed due to travel. Board prep is a recurring weekly meeting.',
+    conflictSlots: [
+      { title: 'Board Prep', time: '3:00 – 4:00 PM · Thu Feb 13', note: 'Recurring · Protected block', accent: 'blue' },
+      { title: 'Acme Corp Call', time: '3:00 – 4:00 PM · Thu Feb 13', note: 'Rescheduled from last week', accent: 'orange' },
+    ],
   },
   {
     id: 'ins-4',
@@ -100,6 +104,10 @@ Best regards`,
     whyItMatters: 'The CEO\'s office flagged this as urgent. The only available slot in both diaries is Thursday 2–3 PM, which directly overlaps Sarah\'s protected Nomura prep block.',
     whatItImpacts: 'Declining risks a high-visibility executive relationship. Accepting removes 60 minutes of prep time for a £34M partnership pitch the following morning.',
     actionStep: { description: 'Compare both commitments and choose a resolution', ctaLabel: 'Compare' },
+    conflictSlots: [
+      { title: "CEO 1:1", time: '2:00 – 3:00 PM · Thu Feb 13', note: 'Urgent request · CEO\'s office', accent: 'red' },
+      { title: 'Nomura Prep', time: '2:00 – 3:00 PM · Thu Feb 13', note: 'Protected · £34M pitch tomorrow', accent: 'blue' },
+    ],
   },
   {
     id: 'ins-6',
@@ -115,6 +123,22 @@ Best regards`,
     whatItImpacts: 'Sarah has a client dinner in NYC tomorrow evening. A 14-hour delay means arrival past midnight — the dinner and any morning meetings would be at risk.',
     actionStep: { description: 'Review backup flight options and pre-book if needed', ctaLabel: 'View Alternatives' },
     crossChannelContext: 'Sarah has a client dinner scheduled for tomorrow evening in NYC. If the flight is delayed significantly, alternative arrangements may be needed.',
+    alternatives: [
+      {
+        label: 'VS3  06:15 → 09:05  LHR → JFK',
+        sublabel: 'Virgin Atlantic · departs 2h 25m earlier',
+        detail: 'All 4 attendees available · On-time rate 94% · £892 · 4 seats remaining',
+        recommended: true,
+        ctaLabel: 'Book Backup Flight',
+      },
+      {
+        label: 'Move Acme Corp meeting to virtual',
+        sublabel: 'Teams / Zoom · no rebooking needed',
+        detail: 'Notify NYC clients to join remotely — avoids flight change entirely',
+        recommended: false,
+        ctaLabel: 'Switch to Virtual',
+      },
+    ],
   },
   {
     id: 'ins-7',
@@ -128,6 +152,15 @@ Best regards`,
     whyItMatters: 'McKinsey submitted the final proposal 3 days ago. No acknowledgement has been sent, which is outside James\'s standard 24-hour response norm.',
     whatItImpacts: 'Silence on a final proposal risks the engagement timeline slipping. McKinsey\'s team has a kickoff date pencilled in that may be reassigned.',
     actionStep: { description: 'Send acknowledgement and confirm James\'s review timeline', ctaLabel: 'Draft Reply' },
+    suggestedResponse: `Dear McKinsey Team,
+
+Thank you for sending through the final proposal. James has received it and will provide his feedback by end of this week.
+
+We appreciate your patience and will be in touch shortly.
+
+Best regards,
+[Your name]
+Executive Assistant to James Whitfield`,
   },
   {
     id: 'ins-8',
