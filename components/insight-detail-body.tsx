@@ -1,6 +1,6 @@
 'use client'
 
-import { Mail, Calendar, Plane, FileText, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Mail, Calendar, Plane, FileText, ArrowRight, CheckCircle2, MapPin, CalendarPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { formatDateTime } from '@/lib/format-date'
@@ -62,6 +62,40 @@ export function InsightDetailBody({ insight }: { insight: Insight }) {
           )}
 
           <RichActionContent insight={insight} />
+        </div>
+      )}
+
+      {/* While you're there — nearby opportunities */}
+      {insight.nearbyOpportunities && insight.nearbyOpportunities.length > 0 && (
+        <div className="rounded-lg border bg-card p-4 space-y-3">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+            <MapPin className="h-3 w-3" />
+            While you&apos;re there
+          </p>
+          <div className="space-y-2">
+            {insight.nearbyOpportunities.map((opp, i) => (
+              <div key={i} className="flex items-start gap-3 rounded-md border bg-muted/20 p-3">
+                <div className="flex-1 min-w-0 space-y-0.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="text-xs font-semibold text-foreground">{opp.name}</p>
+                    <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                      {opp.company}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground border border-border px-1.5 py-0.5 rounded">
+                      {opp.relationship}
+                    </span>
+                  </div>
+                  {opp.note && (
+                    <p className="text-[11px] text-muted-foreground">{opp.note}</p>
+                  )}
+                </div>
+                <Button size="sm" variant="outline" className="shrink-0 gap-1 text-xs">
+                  <CalendarPlus className="h-3 w-3" />
+                  {opp.suggestion}
+                </Button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

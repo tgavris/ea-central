@@ -25,6 +25,7 @@ export type Insight = {
   actionStep?: { description: string; ctaLabel: string }
   conflictSlots?: Array<{ title: string; time: string; note: string; accent: 'blue' | 'orange' | 'red' }>
   alternatives?: Array<{ label: string; sublabel: string; detail: string; recommended?: boolean; ctaLabel: string }>
+  nearbyOpportunities?: Array<{ name: string; company: string; relationship: string; suggestion: string; note?: string }>
 }
 
 export type TodoStatus = 'todo' | 'in-progress' | 'done' | 'snoozed'
