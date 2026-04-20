@@ -144,7 +144,7 @@ export default function SettingsPage() {
           <p className="text-sm text-muted-foreground">Profile, notifications, AI behavior, and data management</p>
         </header>
 
-        <div className="px-8 py-6 space-y-10 max-w-2xl">
+        <div className="px-8 py-6 space-y-10">
 
           {/* ── Your Profile ── */}
           <section ref={(el) => { sectionRefs.current['profile'] = el }}>
