@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { Plus, Mail, Calendar, Plane, FileText, AlertTriangle, X, Zap, Sparkles, ArrowRight } from 'lucide-react'
+import { Plus, Mail, Calendar, Plane, FileText, AlertTriangle, X, Zap, Sparkles, ArrowRight, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Insight, TodoItem, TodoStatus, TodoSpeed, TodoUrgency, TodoViewBy } from '@/lib/types'
 import { useTodo } from '@/lib/todo-context'
