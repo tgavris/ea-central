@@ -32,10 +32,13 @@ export function InsightDetailBody({ insight }: { insight: Insight }) {
   return (
     <div className="space-y-4">
 
-      {/* Why it matters — single merged paragraph */}
-      <div className="rounded-lg border bg-card px-4 py-3 flex items-start gap-2.5">
-        <span className="mt-1 inline-block w-1.5 h-1.5 shrink-0 rounded-full bg-emerald-500" />
-        <p className="text-xs text-foreground leading-relaxed">
+      {/* Context */}
+      <div className="rounded-lg border bg-card px-4 py-3 space-y-1.5">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          Context
+        </p>
+        <p className="text-sm text-foreground leading-relaxed">
           {insight.whyItMatters
             ? `${insight.whyItMatters}${insight.whatItImpacts ? ` ${insight.whatItImpacts}` : ''}`
             : insight.description}
