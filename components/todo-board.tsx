@@ -476,13 +476,18 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
     e.preventDefault()
     const newStatus = columnId as TodoStatus
 
-    if (draggedInsightId && viewBy === 'status' && columnId !== 'todo') {
-      const insight = insights.find((i) => i.id === draggedInsightId)
-      if (insight) {
-        const urgency: TodoUrgency = insight.urgency === 'urgent' ? 'high' : insight.badge ? 'medium' : 'low'
-        addInsightAsTodo(insight, newStatus, urgency, 'medium')
+    if (draggedInsightId && viewBy === 'status') {
+      // Raw insight card dropped — convert to todo (or update status if already exists)
+      // Dropping back on the Insights column is a no-op for raw insight cards
+      if (columnId !== 'todo') {
+        const insight = insights.find((i) => i.id === draggedInsightId)
+        if (insight) {
+          const urgency: TodoUrgency = insight.urgency === 'urgent' ? 'high' : insight.badge ? 'medium' : 'low'
+          addInsightAsTodo(insight, newStatus, urgency, 'medium')
+        }
       }
     } else if (draggedTodo && viewBy === 'status') {
+      // Todo card dragged to any column — update status (including back to 'todo' / Insights column)
       if (draggedTodo.status !== newStatus) {
         updateTodoStatus(draggedTodo.id, newStatus)
       }
@@ -525,7 +530,13 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
     low: 'No low-urgency items',
   }
 
-  // Insights already converted to todos should not appear in the Insights column
+  // Todos flagged via "+To-do" (status='todo') shown at top of Insights column
+  const queuedTodos = (colleagueId
+    ? todos.filter((t) => t.colleagueId === colleagueId)
+    : todos
+  ).filter((t) => t.status === 'todo')
+
+  // Raw insights not yet converted — shown below queued todos
   const todoInsightIds = new Set(todos.filter((t) => t.source === 'insight').map((t) => t.sourceId))
   const columnInsights = (colleagueId
     ? insights.filter((i) => i.colleagueId === colleagueId)
@@ -538,15 +549,15 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
         const isInsightsColumn = viewBy === 'status' && column.id === 'todo'
         const columnTodos = getTodosByColumn(column.id)
         const isDragOver = dragOverColumn === column.id
-        const itemCount = isInsightsColumn ? columnInsights.length : columnTodos.length
+        const itemCount = isInsightsColumn ? queuedTodos.length + columnInsights.length : columnTodos.length
 
         return (
           <div
             key={column.id}
             className="flex flex-col min-h-0"
-            onDragOver={(e) => !isInsightsColumn && handleDragOver(e, column.id)}
+            onDragOver={(e) => handleDragOver(e, column.id)}
             onDragLeave={(e) => { e.stopPropagation(); handleDragLeave() }}
-            onDrop={(e) => !isInsightsColumn && handleDrop(e, column.id)}
+            onDrop={(e) => handleDrop(e, column.id)}
           >
             {/* Column Header */}
             <div className="flex items-center justify-between mb-4">
@@ -564,28 +575,57 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
             <div
               className={cn(
                 'flex-1 overflow-auto rounded-lg border-2 border-dashed p-3 transition-colors',
-                !isInsightsColumn && isDragOver
+                isDragOver
                   ? 'border-primary/50 bg-primary/5'
                   : 'border-transparent bg-muted/30',
               )}
             >
               <div className="space-y-3">
                 {isInsightsColumn ? (
-                  columnInsights.length === 0 ? (
+                  queuedTodos.length === 0 && columnInsights.length === 0 ? (
                     <div className="py-8 text-center text-sm text-muted-foreground">
                       No insights
                     </div>
                   ) : (
-                    columnInsights.map((insight) => (
-                      <InsightBoardCard
-                        key={insight.id}
-                        insight={insight}
-                        isDragging={draggedInsightId === insight.id}
-                        onDragStart={(e) => handleInsightDragStart(e, insight.id)}
-                        onDragEnd={handleDragEnd}
-                        onClick={() => setModalInsight(insight)}
-                      />
-                    ))
+                    <>
+                      {/* Queued todos (added via +To-do) appear first */}
+                      {queuedTodos.map((todo) => (
+                        <div
+                          key={todo.id}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, todo)}
+                          onDragEnd={handleDragEnd}
+                          className="cursor-grab active:cursor-grabbing"
+                        >
+                          <TodoCard
+                            todo={todo}
+                            isDragging={draggedTodo?.id === todo.id}
+                            onClick={() => handleTodoCardClick(todo)}
+                          />
+                        </div>
+                      ))}
+
+                      {/* Divider if both sections have items */}
+                      {queuedTodos.length > 0 && columnInsights.length > 0 && (
+                        <div className="flex items-center gap-2 py-1">
+                          <hr className="flex-1 border-border" />
+                          <span className="text-[10px] text-muted-foreground shrink-0">All insights</span>
+                          <hr className="flex-1 border-border" />
+                        </div>
+                      )}
+
+                      {/* Raw insight cards below */}
+                      {columnInsights.map((insight) => (
+                        <InsightBoardCard
+                          key={insight.id}
+                          insight={insight}
+                          isDragging={draggedInsightId === insight.id}
+                          onDragStart={(e) => handleInsightDragStart(e, insight.id)}
+                          onDragEnd={handleDragEnd}
+                          onClick={() => setModalInsight(insight)}
+                        />
+                      ))}
+                    </>
                   )
                 ) : (
                   <>

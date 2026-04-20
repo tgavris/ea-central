@@ -30,7 +30,7 @@ export function TodoProvider({ children }: { children: ReactNode }) {
       id,
       createdAt: new Date(),
     }
-    setTodos((prev) => [...prev, newTodo])
+    setTodos((prev) => [newTodo, ...prev])
     return id
   }, [])
 
