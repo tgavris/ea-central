@@ -89,7 +89,7 @@ export function InsightDetailBody({ insight }: { insight: Insight }) {
                     <p className="text-[11px] text-muted-foreground">{opp.note}</p>
                   )}
                 </div>
-                <Button size="sm" variant="outline" className="shrink-0 gap-1 text-xs">
+                <Button size="sm" variant="outline" className="shrink-0 w-40 gap-1 text-xs">
                   <CalendarPlus className="h-3 w-3" />
                   {opp.suggestion}
                 </Button>
@@ -209,7 +209,7 @@ function RichActionContent({ insight }: { insight: Insight }) {
               <p className="text-[11px] text-muted-foreground">{alt.sublabel}</p>
               <p className="text-[11px] text-muted-foreground">{alt.detail}</p>
             </div>
-            <Button size="sm" variant={alt.recommended ? 'default' : 'outline'} className="shrink-0 text-xs gap-1">
+            <Button size="sm" variant={alt.recommended ? 'default' : 'outline'} className="shrink-0 w-40 text-xs gap-1">
               {alt.ctaLabel}
             </Button>
           </div>
