@@ -73,7 +73,7 @@ export function InsightsList({ insights, colleagueName, selectedId, onSelect }: 
                           isSelected={selectedId === insight.id}
                         />
                         {index < groupItems.length - 1 && (
-                          <hr className="border-border" />
+                          <hr className="border-border -mx-5" />
                         )}
                       </div>
                     ))}
@@ -101,7 +101,7 @@ export function InsightsList({ insights, colleagueName, selectedId, onSelect }: 
                 isSelected={selectedId === insight.id}
               />
               {index < items.length - 1 && (
-                <hr className="border-border" />
+                <hr className="border-border -mx-5" />
               )}
             </div>
           ))}

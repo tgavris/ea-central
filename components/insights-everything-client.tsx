@@ -40,25 +40,30 @@ export function InsightsEverythingClient({ insights, attentionCount }: InsightsE
   }, [clearUndoNotifications])
 
   return (
-    <div className="flex h-full overflow-hidden">
-      {/* Left pane — list (narrows when detail is open) */}
-      <div className={selected ? 'w-80 shrink-0 flex flex-col border-r bg-background overflow-hidden' : 'flex-1 flex flex-col overflow-hidden'}>
-        <InsightsHeader insightCount={attentionCount} />
-        <div className="flex-1 overflow-y-auto p-6">
-          <InsightsList
-            insights={insights}
-            selectedId={selected?.id}
-            onSelect={setSelected}
-          />
-        </div>
-      </div>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Shared full-width header — one border-b line for both panels */}
+      <InsightsHeader insightCount={attentionCount} />
 
-      {/* Right pane — detail (only shown when an insight is selected) */}
-      {selected && (
-        <div className="flex-1 flex flex-col overflow-hidden bg-background border-l">
-          <InsightDetailPane insight={selected} onClose={() => setSelected(null)} />
+      {/* Content area — splits when detail is open */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left pane — list */}
+        <div className={selected ? 'w-80 shrink-0 flex flex-col border-r overflow-hidden' : 'flex-1 flex flex-col overflow-hidden'}>
+          <div className="flex-1 overflow-y-auto p-6">
+            <InsightsList
+              insights={insights}
+              selectedId={selected?.id}
+              onSelect={setSelected}
+            />
+          </div>
         </div>
-      )}
+
+        {/* Right pane — detail */}
+        {selected && (
+          <div className="flex-1 flex flex-col overflow-hidden bg-background">
+            <InsightDetailPane insight={selected} onClose={() => setSelected(null)} />
+          </div>
+        )}
+      </div>
     </div>
   )
 }

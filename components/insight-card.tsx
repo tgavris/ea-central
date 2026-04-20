@@ -105,7 +105,7 @@ export function InsightRow({ insight, showColleague = false, onSelect, isSelecte
       role={onSelect ? 'button' : undefined}
       onClick={onSelect}
       className={cn(
-        'group flex items-start gap-3 py-2.5 -mx-5 px-5 rounded-lg transition-colors duration-100',
+        'group flex items-start gap-3 py-2.5 -mx-5 px-5 transition-colors duration-100',
         onSelect && 'cursor-pointer',
         isSelected ? 'bg-muted' : 'hover:bg-muted/60',
       )}
