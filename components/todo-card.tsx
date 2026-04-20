@@ -25,9 +25,10 @@ const typeIcons = {
 interface TodoCardProps {
   todo: TodoItem
   isDragging?: boolean
+  onClick?: () => void
 }
 
-export function TodoCard({ todo, isDragging }: TodoCardProps) {
+export function TodoCard({ todo, isDragging, onClick }: TodoCardProps) {
   const { removeTodo } = useTodo()
   const Icon = todo.source === 'insight' 
     ? typeIcons[todo.metadata.type as keyof typeof typeIcons] || FileText
@@ -36,9 +37,11 @@ export function TodoCard({ todo, isDragging }: TodoCardProps) {
 
   return (
     <div
+      onClick={onClick}
       className={cn(
         'group relative bg-card rounded-lg border p-3 transition-all duration-200',
         'hover:shadow-md hover:border-border/80',
+        onClick && 'cursor-pointer',
         isDragging && 'shadow-lg rotate-2 scale-105'
       )}
     >

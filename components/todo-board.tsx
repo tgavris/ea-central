@@ -284,6 +284,88 @@ function InsightModal({
   )
 }
 
+function TodoModal({
+  todo,
+  onClose,
+  onMoveTo,
+}: {
+  todo: TodoItem
+  onClose: () => void
+  onMoveTo: (status: TodoStatus) => void
+}) {
+  const colleagueName = getColleagueName(todo.colleagueId)
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <div
+        className="relative z-10 w-full max-w-xl max-h-[85vh] bg-background rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="px-6 pt-5 pb-4 border-b shrink-0">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                  {colleagueName}
+                </span>
+              </div>
+              <h2 className="text-base font-semibold text-foreground leading-snug">{todo.title}</h2>
+            </div>
+            <button onClick={onClose} className="shrink-0 p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto px-6 py-5">
+          {todo.description && (
+            <div className="rounded-lg border bg-card px-4 py-3 space-y-1.5">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                Context
+              </p>
+              <p className="text-sm text-foreground leading-relaxed">{todo.description}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="px-6 py-4 border-t bg-muted/20 shrink-0">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">Move to</p>
+          <div className="flex items-center gap-2">
+            {([
+              { id: 'todo', label: 'Insights' },
+              { id: 'in-progress', label: 'In progress' },
+              { id: 'done', label: 'Done' },
+              { id: 'snoozed', label: 'Snoozed' },
+            ] as { id: TodoStatus; label: string }[])
+              .filter((col) => col.id !== todo.status)
+              .map((col) => (
+                <button
+                  key={col.id}
+                  onClick={() => onMoveTo(col.id)}
+                  className="flex items-center gap-1.5 text-xs font-medium border border-border rounded-md px-3 py-1.5 hover:bg-muted transition-colors"
+                >
+                  <ArrowRight className="h-3 w-3" />
+                  {col.label}
+                </button>
+              ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 interface TodoBoardProps {
   viewBy: TodoViewBy
   colleagueId?: string
@@ -295,6 +377,15 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
   const [draggedInsightId, setDraggedInsightId] = useState<string | null>(null)
   const [dragOverColumn, setDragOverColumn] = useState<string | null>(null)
   const [modalInsight, setModalInsight] = useState<Insight | null>(null)
+  const [modalTodo, setModalTodo] = useState<TodoItem | null>(null)
+
+  const handleTodoCardClick = (todo: TodoItem) => {
+    if (todo.source === 'insight') {
+      const linked = insights.find((i) => i.id === todo.sourceId)
+      if (linked) { setModalInsight(linked); return }
+    }
+    setModalTodo(todo)
+  }
   const [addingTask, setAddingTask] = useState(false)
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [newTaskColleagueId, setNewTaskColleagueId] = useState(colleagueId ?? 'personal')
@@ -509,6 +600,7 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
                         <TodoCard
                           todo={todo}
                           isDragging={draggedTodo?.id === todo.id}
+                          onClick={() => handleTodoCardClick(todo)}
                         />
                       </div>
                     ))}
@@ -581,6 +673,14 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
           insight={modalInsight}
           onClose={() => setModalInsight(null)}
           onMoveTo={(status, urgency, speed) => addInsightAsTodo(modalInsight, status, urgency, speed)}
+        />
+      )}
+
+      {modalTodo && (
+        <TodoModal
+          todo={modalTodo}
+          onClose={() => setModalTodo(null)}
+          onMoveTo={(status) => { updateTodoStatus(modalTodo.id, status); setModalTodo(null) }}
         />
       )}
     </div>
