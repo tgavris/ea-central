@@ -14,18 +14,20 @@ interface InsightRowProps {
 }
 
 export function InsightRow({ insight, showColleague = false, onSelect, isSelected }: InsightRowProps) {
-  const { addTodo, removeTodo, isTodoAdded, registerUndo, dismissUndo } = useTodo()
+  const { todos, addTodo, removeTodo, isTodoAdded, registerUndo, dismissUndo } = useTodo()
 
-  // 'idle' | 'added' | 'dismissed'
-  const [state, setState] = useState<'idle' | 'added' | 'dismissed'>('idle')
+  const [state, setState] = useState<'idle' | 'added'>('idle')
   const [visible, setVisible] = useState(true)
   const addedTodoIdRef = useRef<string | null>(null)
   const dismissTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Tracks that undo was explicitly invoked so the sync effect doesn't fight back
+  const undoingRef = useRef(false)
 
-  // Sync with external state (e.g. if todo was added from detail page)
+  // Sync with external state (e.g. todo added from detail pane or drag-drop)
   const alreadyAdded = isTodoAdded(insight.id)
   useEffect(() => {
-    if (alreadyAdded && state === 'idle') {
+    if (alreadyAdded && state === 'idle' && !undoingRef.current) {
+      setVisible(true)
       setState('added')
     }
   }, [alreadyAdded, state])
@@ -33,6 +35,7 @@ export function InsightRow({ insight, showColleague = false, onSelect, isSelecte
   const handleAddTodo = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    undoingRef.current = false
 
     const id = addTodo({
       colleagueId: insight.colleagueId,
@@ -55,37 +58,43 @@ export function InsightRow({ insight, showColleague = false, onSelect, isSelecte
 
     registerUndo()
     setState('added')
+    setVisible(true)
 
-    // Auto-dismiss after 4 seconds
+    // Auto-dismiss the undo banner after 8 seconds (but keep todo in context)
     dismissTimerRef.current = setTimeout(() => {
       setVisible(false)
       dismissUndo()
-    }, 4000)
+    }, 8000)
   }
 
   const handleUndo = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current)
-    if (addedTodoIdRef.current) {
-      removeTodo(addedTodoIdRef.current)
-      addedTodoIdRef.current = null
+
+    // Use ref if fresh click, otherwise find by sourceId (handles re-mount case)
+    const todoId = addedTodoIdRef.current
+      ?? todos.find((t) => t.source === 'insight' && t.sourceId === insight.id)?.id
+      ?? null
+    if (todoId) {
+      undoingRef.current = true
+      removeTodo(todoId)
     }
+    addedTodoIdRef.current = null
     dismissUndo()
     setState('idle')
     setVisible(true)
+    // Allow sync effect to run again after this frame
+    requestAnimationFrame(() => { undoingRef.current = false })
   }
 
-  // Once dismissed (faded out), keep height=0 to collapse the row
-  if (!visible) return null
+  // Row collapsed after auto-dismiss banner (todo still exists in context)
+  if (!visible && state === 'idle') return null
 
   // The inline confirmation row
   if (state === 'added') {
     return (
-      <div className={cn(
-        'flex items-center gap-2 py-2.5 text-sm transition-opacity duration-300',
-        !visible && 'opacity-0'
-      )}>
+      <div className="flex items-center gap-2 py-2.5 text-sm">
         <span className="text-muted-foreground">
           <span className="font-medium text-foreground">&ldquo;{insight.title}&rdquo;</span>
           {' '}added to To-do.
