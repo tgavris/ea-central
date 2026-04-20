@@ -53,7 +53,7 @@ export function InsightsEverythingClient({ insights, attentionCount }: InsightsE
       <div className="flex flex-1 overflow-hidden">
         {/* Left pane */}
         <div className={selected ? 'w-80 shrink-0 flex flex-col border-r overflow-hidden' : 'flex-1 flex flex-col overflow-hidden'}>
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto">
             <InsightsList insights={insights} selectedId={selected?.id} onSelect={setSelected} />
           </div>
         </div>

@@ -48,36 +48,34 @@ export function InsightsList({ insights, colleagueName, selectedId, onSelect }: 
 
       return (
         <section>
-          <h2 className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-4">
+          <h2 className="text-xs font-medium uppercase tracking-widest text-muted-foreground px-5 pt-6 pb-3">
             {title}
           </h2>
-          <div className="space-y-6">
-            {Object.entries(grouped).map(([name, groupItems]) => {
+          <div>
+            {Object.entries(grouped).map(([name, groupItems], groupIndex, arr) => {
               const colleague = getColleagueById(groupItems[0]?.colleagueId)
               return (
                 <div key={name}>
-                  <div className="flex items-center gap-2.5 mb-2.5 px-2.5 py-1.5 bg-muted rounded-lg w-fit">
-                    <div className="flex h-5 w-5 items-center justify-center rounded bg-muted-foreground/20">
-                      <User className="h-3 w-3 text-foreground/60" />
+                  {/* Colleague badge row */}
+                  <div className="flex items-center gap-2 px-5 py-2 border-t border-border bg-muted/30">
+                    <div className="flex h-4 w-4 items-center justify-center rounded bg-muted-foreground/20">
+                      <User className="h-2.5 w-2.5 text-foreground/60" />
                     </div>
-                    <span className="text-xs font-semibold text-foreground">
-                      {name}
-                    </span>
+                    <span className="text-xs font-semibold text-foreground">{name}</span>
                   </div>
-                  <div className="bg-card border border-border rounded-xl px-5 py-1">
-                    {groupItems.map((insight, index) => (
-                      <div key={insight.id}>
-                        <InsightRow
-                          insight={insight}
-                          onSelect={onSelect ? () => onSelect(insight) : undefined}
-                          isSelected={selectedId === insight.id}
-                        />
-                        {index < groupItems.length - 1 && (
-                          <hr className="border-border -mx-5" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                  {/* Insight rows */}
+                  {groupItems.map((insight, index) => (
+                    <div key={insight.id} className="px-5">
+                      <InsightRow
+                        insight={insight}
+                        onSelect={onSelect ? () => onSelect(insight) : undefined}
+                        isSelected={selectedId === insight.id}
+                      />
+                      {index < groupItems.length - 1 && (
+                        <hr className="border-border -mx-5" />
+                      )}
+                    </div>
+                  ))}
                 </div>
               )
             })}
@@ -86,15 +84,15 @@ export function InsightsList({ insights, colleagueName, selectedId, onSelect }: 
       )
     }
 
-    // Single colleague view - no grouping
+    // Single colleague view - full-width edge-to-edge rows
     return (
       <section>
-        <h2 className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3">
+        <h2 className="text-xs font-medium uppercase tracking-widest text-muted-foreground px-5 pt-6 pb-3">
           {title}
         </h2>
-        <div className="bg-card border border-border rounded-xl px-5 py-1">
+        <div>
           {items.map((insight, index) => (
-            <div key={insight.id}>
+            <div key={insight.id} className="px-5">
               <InsightRow
                 insight={insight}
                 onSelect={onSelect ? () => onSelect(insight) : undefined}
@@ -111,7 +109,7 @@ export function InsightsList({ insights, colleagueName, selectedId, onSelect }: 
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-0">
       {/* Pending for You */}
       {renderInsightGroup(needsAttention, 'Pending for You')}
 
@@ -126,10 +124,10 @@ export function InsightsList({ insights, colleagueName, selectedId, onSelect }: 
 
         return (
           <section>
-            <h2 className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-4">
+            <h2 className="text-xs font-medium uppercase tracking-widest text-muted-foreground px-5 pt-6 pb-3">
               Topics to catch up on
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-3 px-5 pb-6">
               {Object.entries(byRule).map(([rule, items]) => (
                 <div key={rule} className="space-y-2">
                   {items.map((insight) => (
