@@ -282,7 +282,7 @@ export default function PreferencesPage() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-8 py-6 space-y-8">
+      <main className="flex-1 px-8 py-6 space-y-8">
 
         {/* A. EA Profile */}
         <section ref={(el) => { sectionRefs.current['profile'] = el }}>
