@@ -20,6 +20,9 @@ export type Insight = {
   sources?: { label: string; url: string }[]
   suggestedResponse?: string
   crossChannelContext?: string
+  whyItMatters?: string
+  whatItImpacts?: string
+  actionStep?: { description: string; ctaLabel: string }
 }
 
 export type TodoStatus = 'todo' | 'in-progress' | 'done' | 'snoozed'
