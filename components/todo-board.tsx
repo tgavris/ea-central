@@ -405,6 +405,12 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
   }
 
   const addInsightAsTodo = (insight: Insight, status: TodoStatus, urgency: TodoUrgency, speed: TodoSpeed) => {
+    // If this insight is already a todo, just move it — don't duplicate
+    const existing = todos.find((t) => t.source === 'insight' && t.sourceId === insight.id)
+    if (existing) {
+      updateTodoStatus(existing.id, status)
+      return
+    }
     addTodo({
       colleagueId: insight.colleagueId,
       title: insight.title,
@@ -471,9 +477,12 @@ export function TodoBoard({ viewBy, colleagueId }: TodoBoardProps) {
     low: 'No low-urgency items',
   }
 
-  const columnInsights = colleagueId
+  // Insights already converted to todos should not appear in the Insights column
+  const todoInsightIds = new Set(todos.filter((t) => t.source === 'insight').map((t) => t.sourceId))
+  const columnInsights = (colleagueId
     ? insights.filter((i) => i.colleagueId === colleagueId)
     : insights
+  ).filter((i) => !todoInsightIds.has(i.id))
 
   return (
     <div className="grid grid-cols-4 gap-6 h-full">
