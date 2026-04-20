@@ -39,30 +39,20 @@ export default function InboxPage() {
   })
 
   return (
-    <div className="flex h-full overflow-hidden">
-      {/* Left pane - list */}
-      <div className="w-80 shrink-0 flex flex-col border-r bg-background">
-        {/* List header */}
-        <div className="px-4 py-3 border-b">
-          <div className="flex items-center justify-between mb-3">
-            <h1 className="text-sm font-semibold text-foreground">Inbox</h1>
-            <button className="p-1 rounded hover:bg-muted transition-colors text-muted-foreground">
-              <RefreshCw className="h-3.5 w-3.5" />
-            </button>
-          </div>
-          <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
-            <Input
-              placeholder="Search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 h-7 text-xs bg-muted border-0 focus-visible:ring-1"
-            />
-          </div>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Shared full-width header — one border-b line for both panels */}
+      <div className="flex items-center gap-3 px-4 py-3 border-b bg-background shrink-0">
+        <h1 className="text-sm font-semibold text-foreground shrink-0">Inbox</h1>
+        <div className="relative flex-1 max-w-[200px]">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+          <Input
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-8 h-7 text-xs bg-muted border-0 focus-visible:ring-1"
+          />
         </div>
-
-        {/* Filter tabs */}
-        <div className="flex gap-1 px-3 py-2 border-b">
+        <div className="flex gap-1">
           {(['all', 'unread'] as const).map((f) => (
             <button
               key={f}
@@ -78,7 +68,15 @@ export default function InboxPage() {
             </button>
           ))}
         </div>
+        <button className="ml-auto p-1 rounded hover:bg-muted transition-colors text-muted-foreground">
+          <RefreshCw className="h-3.5 w-3.5" />
+        </button>
+      </div>
 
+      {/* Content area */}
+      <div className="flex flex-1 overflow-hidden">
+      {/* Left pane - list */}
+      <div className="w-80 shrink-0 flex flex-col border-r bg-background">
         {/* Email list */}
         <div className="flex-1 overflow-y-auto">
           {filtered.map((item) => (
@@ -136,6 +134,7 @@ export default function InboxPage() {
           Select a message to read
         </div>
       )}
+      </div>
     </div>
   )
 }
